@@ -17,7 +17,7 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./TrafficCapture/gradlew
-        working-directory: ./TrafficCapture
+        working-directory: /TrafficCapture
 
       - name: Cache Gradle packages
         uses: actions/cache@v2
@@ -30,8 +30,8 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-        working-directory: ./TrafficCapture
+        working-directory: /TrafficCapture
 
       - name: Test with Gradle
         run: ./gradlew test
-        working-directory: ./TrafficCapture
+        working-directory: /TrafficCapture
