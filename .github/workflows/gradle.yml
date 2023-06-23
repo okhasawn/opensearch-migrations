@@ -23,10 +23,52 @@ jobs:
         run: ./gradlew test jacocoTestReport
         working-directory: TrafficCapture
 
-      - name: Upload to Codecov
+      - name: CaptureKafkaOffloader - Upload to Codecov
         uses: codecov/codecov-action@v3
         with:
-          file: TrafficCapture/*/build/reports/jacoco/test/jacocoTestReport.xml
+          file: TrafficCapture/captureKafkaOffloader/build/reports/jacoco/test/jacocoTestReport.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
+
+      - name: captureOffloader - Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: TrafficCapture/captureOffloader/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: KafkaPrinter - Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: TrafficCapture/KafkaPrinter/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: nettyWireLogging - Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: TrafficCapture/nettyWireLogging/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: trafficCaptureProxyServer - Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: TrafficCapture/trafficCaptureProxyServer/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: trafficReplayer - Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: TrafficCapture/trafficReplayer/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+
