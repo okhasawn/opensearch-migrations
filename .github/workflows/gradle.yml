@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew test jacocoTestReport
         working-directory: TrafficCapture
 
-      - name: CaptureKafkaOffloader - Upload to Codecov
+      - name: Upload to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
