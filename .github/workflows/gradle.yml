@@ -26,49 +26,16 @@ jobs:
       - name: CaptureKafkaOffloader - Upload to Codecov
         uses: codecov/codecov-action@v3
         with:
-          file: TrafficCapture/captureKafkaOffloader/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: TrafficCapture/captureKafkaOffloader/build/reports/jacoco/test/jacocoTestReport.xml, 
+                TrafficCapture/captureOffloader/build/reports/jacoco/test/jacocoTestReport.xml,
+                TrafficCapture/KafkaPrinter/build/reports/jacoco/test/jacocoTestReport.xml,
+                TrafficCapture/nettyWireLogging/build/reports/jacoco/test/jacocoTestReport.xml,
+                TrafficCapture/trafficCaptureProxyServer/build/reports/jacoco/test/jacocoTestReport.xml,
+                TrafficCapture/trafficReplayer/build/reports/jacoco/test/jacocoTestReport.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
 
-      - name: captureOffloader - Upload to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: TrafficCapture/captureOffloader/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-
-      - name: KafkaPrinter - Upload to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: TrafficCapture/KafkaPrinter/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-
-      - name: nettyWireLogging - Upload to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: TrafficCapture/nettyWireLogging/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-
-      - name: trafficCaptureProxyServer - Upload to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: TrafficCapture/trafficCaptureProxyServer/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-
-      - name: trafficReplayer - Upload to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: TrafficCapture/trafficReplayer/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
 
 
