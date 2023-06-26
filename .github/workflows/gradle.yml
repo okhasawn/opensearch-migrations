@@ -3,7 +3,7 @@ name: Gradle Build and Test
 on: [push, pull_request]
 
 jobs:
-  build:
+  gradle-build-and-test:
 
     runs-on: ubuntu-latest
 
