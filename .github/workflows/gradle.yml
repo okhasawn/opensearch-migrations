@@ -16,26 +16,16 @@ jobs:
           distribution: 'adopt'
 
       - name: Run Gradle Build
-        run: ./gradlew assemble
+        run: ./gradlew build -x test
         working-directory: TrafficCapture
 
       - name: Run Tests with Coverage
-        run: ./gradlew test jacocoTestReport
+        run: ./gradlew test jacocoTestReport --info
         working-directory: TrafficCapture
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: TrafficCapture/captureKafkaOffloader/build/reports/jacoco/test/jacocoTestReport.xml, 
-                TrafficCapture/captureOffloader/build/reports/jacoco/test/jacocoTestReport.xml,
-                TrafficCapture/KafkaPrinter/build/reports/jacoco/test/jacocoTestReport.xml,
-                TrafficCapture/nettyWireLogging/build/reports/jacoco/test/jacocoTestReport.xml,
-                TrafficCapture/trafficCaptureProxyServer/build/reports/jacoco/test/jacocoTestReport.xml,
-                TrafficCapture/trafficReplayer/build/reports/jacoco/test/jacocoTestReport.xml
+          files: "**/jacocoTestReport.xml"
           flags: unittests
-          name: codecov-umbrella
           fail_ci_if_error: false
-
-
-
