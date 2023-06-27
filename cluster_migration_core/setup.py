@@ -13,6 +13,7 @@ setuptools.setup(
         "pexpect",
         "py",
         "pytest",
+        "numpy",
         "requests",
         "robotframework"
     ],
