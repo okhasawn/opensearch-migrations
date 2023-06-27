@@ -65,6 +65,7 @@ class Cluster:
         self._nodes: Dict[str, Node] = {}
         self._shared_volume = shared_volume
         self._starting_port = starting_port
+        print(starting_port)
 
         if self._cluster_config.node_count < 1:
             raise ValueError("Number of starting nodes should be greater than or equal to 1")
