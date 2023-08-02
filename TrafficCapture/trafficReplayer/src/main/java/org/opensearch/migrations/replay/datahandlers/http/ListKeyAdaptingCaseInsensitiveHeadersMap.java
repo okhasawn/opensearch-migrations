@@ -50,9 +50,11 @@ public class ListKeyAdaptingCaseInsensitiveHeadersMap extends AbstractMap<String
         return strictHeadersMap.put(key, strList);
     }
 
+
     /**
      * This is just casting the underlying object's entrySet.  An old git commit will show this unrolled,
      * but this should be significantly more efficient.
+     *
      */
     @Override
     public Set<Entry<String, Object>> entrySet() {

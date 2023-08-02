@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 @Slf4j
 public class TrafficReplayer {
 
@@ -108,6 +109,11 @@ public class TrafficReplayer {
                 arity = 0,
                 description = "Do not check the server's certificate")
         boolean allowInsecureConnections;
+        @Parameter(required = false,
+                names = {"--sigv4"},
+                arity = 0,
+                description = "Enable SigV4 Signing")
+        boolean enableSigV4 = false;
         @Parameter(required = false,
                 names = {"--auth-header-value"},
                 arity = 1,
@@ -213,7 +219,8 @@ public class TrafficReplayer {
                 new CapturedTrafficToHttpTransactionAccumulator(observedPacketConnectionTimeout,
                         getRecordedRequestReconstructCompleteHandler(requestFutureMap),
                         getRecordedRequestAndResponseReconstructCompleteHandler(successCount, exceptionCount,
-                                tupleWriter, requestFutureMap, requestToFinalWorkFuturesMap));
+                                tupleWriter, requestFutureMap, requestToFinalWorkFuturesMap)
+        );
         try {
             runReplay(trafficChunkStream, trafficToHttpTransactionAccumulator);
         } catch (Exception e) {
@@ -289,8 +296,7 @@ public class TrafficReplayer {
             if (log.isTraceEnabled()) {
                 log.trace("Done receiving captured stream for this " + rrPair.requestData);
             }
-            var requestData = rrPair.requestData;
-            var resultantCf = responseInProgressMap.remove(requestData)
+            var resultantCf = responseInProgressMap.remove(rrPair.requestData)
                     .map(f ->
                             f.handle((summary, t) -> {
                                 try {
@@ -432,6 +438,9 @@ public class TrafficReplayer {
     public void runReplay(Stream<TrafficStream> trafficChunkStream,
                           CapturedTrafficToHttpTransactionAccumulator trafficToHttpTransactionAccumulator) {
         trafficChunkStream
-                .forEach(ts-> trafficToHttpTransactionAccumulator.accept(ts));
+                .forEach(ts-> ts.getSubStreamList().stream()
+                        .forEach(o ->
+                                trafficToHttpTransactionAccumulator.accept(ts.getNodeId(), ts.getConnectionId(), o))
+                );
     }
 }
