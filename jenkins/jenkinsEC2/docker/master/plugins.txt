@@ -1,0 +1,7 @@
+role-strategy
+github-oauth
+thinBackup
+git
+authorize-project
+configuration-as-code
+blueocean
