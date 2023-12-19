@@ -144,7 +144,10 @@ cdk_context=$(echo "${cdk_context/<SOURCE_CLUSTER_ENDPOINT>/http://${source_endp
 cdk_context=$(echo $cdk_context | jq '@json')
 
 cd ../../deployment/cdk/opensearch-service-migration
-./buildDockerImages.sh
+sudo usermod -aG docker $USER
+sudo newgrp docker
+
+sudo ./buildDockerImages.sh
 npm install
 cdk deploy "*" --c aws-existing-source=$cdk_context --c contextId=aws-existing-source --require-approval never --concurrency 3
 if [ "$ENABLE_CAPTURE_PROXY" = true ] ; then
