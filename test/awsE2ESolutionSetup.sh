@@ -34,7 +34,7 @@ prepare_source_nodes_for_capture () {
       aws ec2 modify-instance-attribute --instance-id $id --groups $group_ids_string
     fi
     echo "Executing ./startCaptureProxy.sh --kafka-endpoints $kafka_brokers on node: $id. Attempting to append output of command: "
-    command_id=$(aws ssm send-command --instance-ids "$id" --document-name "AWS-RunShellScript" --parameters "commands=cd /home/ec2-user/capture-proxy && sed -i '2iset -x' startCaptureProxy.sh && ./startCaptureProxy.sh --kafka-endpoints $kafka_brokers" --output text --query 'Command.CommandId')
+    command_id=$(aws ssm send-command --instance-ids "$id" --document-name "AWS-RunShellScript" --parameters commands="cd /home/ec2-user/capture-proxy && ./startCaptureProxy.sh --kafka-endpoints $kafka_brokers" --output text --query 'Command.CommandId')
 
     sleep 5
     echo "Standard Output:"
