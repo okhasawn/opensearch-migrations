@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Note: As this script will deploy an E2E solution in AWS, it assumes all the dependencies of the migration solution (e.g. aws cli, cdk cli,
 # configured aws credentials, git, java, docker) as well as 'jq'
