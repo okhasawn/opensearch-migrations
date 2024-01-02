@@ -13,6 +13,8 @@ import uuid
 import string
 import secrets
 import pytest
+import boto3
+from requests_aws4auth import AWS4Auth
 
 from requests.exceptions import ConnectionError, SSLError
 
@@ -92,15 +94,23 @@ class E2ETests(unittest.TestCase):
     def setup_authentication(self, auth_type, username, password):
         if auth_type == "basic":
             return (username, password)
+        elif auth_type == "sigv4":
+            session = boto3.Session()
+            credentials = session.get_credentials()
+            aws_auth = AWS4Auth(credentials.access_key, credentials.secret_key, session.region_name, 'es',
+                                session_token=credentials.token)
+            return aws_auth
         return None
 
     def set_common_values(self):
+        logger.debug("Setting up common values")
         self.index = f"my_index_{uuid.uuid4()}"
         self.doc_id = '7'
         self.ignore_list = []
 
     def setUp(self):
         self.set_common_values()
+        logger.debug("Setting up test environment")
         retry_request(delete_index, args=(self.proxy_endpoint, self.index, self.source_auth, self.source_verify_ssl),
                       expected_status_code=HTTPStatus.NOT_FOUND)
         retry_request(delete_document, args=(self.proxy_endpoint, self.index, self.doc_id, self.source_auth,
@@ -108,6 +118,7 @@ class E2ETests(unittest.TestCase):
                       expected_status_code=HTTPStatus.NOT_FOUND)
 
     def tearDown(self):
+        logger.debug("Tearing down test environment")
         delete_index(self.proxy_endpoint, self.index, self.source_auth, self.source_verify_ssl)
         delete_document(self.proxy_endpoint, self.index, self.doc_id, self.source_auth, self.source_verify_ssl)
 
@@ -123,9 +134,11 @@ class E2ETests(unittest.TestCase):
                                        expected_status_code=HTTPStatus.OK)
         self.assertEqual(proxy_response.status_code, HTTPStatus.OK)
 
+        logger.debug(f"Checking index on target: {self.target_endpoint}, index: {self.index}")
         target_response = retry_request(check_index, args=(self.target_endpoint, self.index, self.target_auth,
                                                            self.target_verify_ssl),
                                         expected_status_code=HTTPStatus.OK)
+        logger.debug(f"Target response: {target_response.text}")
         self.assertEqual(target_response.status_code, HTTPStatus.OK)
         source_response = retry_request(check_index, args=(self.source_endpoint, self.index, self.source_auth,
                                                            self.source_verify_ssl),
